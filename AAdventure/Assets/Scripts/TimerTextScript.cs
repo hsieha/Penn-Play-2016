@@ -25,5 +25,10 @@ public class TimerTextScript : MonoBehaviour {
         timerText.text = string.Format("{0:0} : {1:00}", minutes, seconds);
 
         time -= Time.deltaTime;
+
+        if(time < 0)
+        {
+            return;
+        }
     }
 }
