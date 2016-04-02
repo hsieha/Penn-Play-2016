@@ -15,7 +15,6 @@ public class PlayerBehaviourScript : MonoBehaviour {
 	void Update () {
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            Debug.Log("Hi");
             rb.MovePosition(this.transform.position - new Vector3(0, 1 * offset, 0));
         }
         if (Input.GetKey(KeyCode.UpArrow))
