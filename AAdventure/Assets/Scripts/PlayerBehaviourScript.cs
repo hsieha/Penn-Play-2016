@@ -31,7 +31,7 @@ public class PlayerBehaviourScript : MonoBehaviour {
         if (Input.GetKey(KeyCode.RightArrow))
         {
             rb.MovePosition(this.transform.position - new Vector3(-1 * offset, 0, 0));
-        }
+		} 
 		if (rb.position.x > curRoomPos.x + 3.5) {
 			cam.transform.position += new Vector3 (7, 0, 0);
 			updateRoomPos ();
