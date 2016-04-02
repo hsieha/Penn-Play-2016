@@ -3,7 +3,6 @@ using System.Collections;
 
 public class PlayerBehaviourScript : MonoBehaviour {
     public float offset = 0.2f;
-    public float thrust = 2f;
     public Rigidbody rb;
 
     // Use this for initialization
@@ -15,7 +14,6 @@ public class PlayerBehaviourScript : MonoBehaviour {
 	void Update () {
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            Debug.Log("Hi");
             rb.MovePosition(this.transform.position - new Vector3(0, 1 * offset, 0));
         }
         if (Input.GetKey(KeyCode.UpArrow))
@@ -34,7 +32,9 @@ public class PlayerBehaviourScript : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Hello");
+		if (collision.collider.gameObject.layer == LayerMask.NameToLayer ("Wall")) {
+			rb.velocity = new Vector3 (0, 0, 0);
+		}
     }
 
 }

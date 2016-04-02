@@ -12,4 +12,5 @@ public class WallScript : MonoBehaviour {
 	void Update () {
 	
 	}
+
 }
