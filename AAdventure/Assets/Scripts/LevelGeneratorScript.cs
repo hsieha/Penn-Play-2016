@@ -13,6 +13,7 @@ public class LevelGeneratorScript : MonoBehaviour {
 	public Transform treasure;
 	public Transform exit;
 	public Transform obstacle;
+	public Transform key;
 
 	enum Entry{
 		Left, Right, Top, Bottom
@@ -25,6 +26,7 @@ public class LevelGeneratorScript : MonoBehaviour {
 		generateTreasure ();
 		generateExit (4);
 		generateObstacles (2);
+		generateKeyAndDoor ();
 		Instantiate (player, new Vector3 (0, 0, -1), Quaternion.AngleAxis(90, new Vector3(1,0,0)));
 	}
 	
@@ -195,12 +197,93 @@ public class LevelGeneratorScript : MonoBehaviour {
 					continue;
 				if (Random.value < 0.25) {
 					Transform obstacleTransform = (Transform) Instantiate 
-						(obstacle, new Vector3 (t.x * 7 + (Random.value - 0.5f) * 3, t.y * 7 + (Random.value - 0.5f) * 3, -1), Quaternion.identity);
+						(obstacle, new Vector3 (t.x * 7 + (Random.value - 0.5f) * 4, t.y * 7 + (Random.value - 0.5f) * 4, -1), Quaternion.identity);
 					obstacleTransform.parent = map [t];
 				}
 			}
 			count++;
 		}
+	}
+
+	public void generateKeyAndDoor() {
+		int rand = Random.Range (0, map.Keys.Count);
+		int count = 0;
+		Tuple doorLocation = new Tuple (0, 0);
+		foreach (Tuple t in map.Keys) {
+			if (count == rand) {
+				doorLocation = t;
+				break;
+			}
+			count++;
+		}
+		RoomObjectScript rScript = map [doorLocation].GetComponentInChildren<RoomObjectScript> ();
+		count = 0;
+		bool isValid = false;
+		while (!isValid && count < 1000) {
+			rand = Random.Range (0, 4);
+			if(rand == (int) Entry.Left && !rScript.leftWallEntry.gameObject.activeSelf) {
+				isValid = true;
+			}
+			if(rand == (int) Entry.Right && !rScript.rightWallEntry.gameObject.activeSelf) {
+				isValid = true;
+			}
+			if(rand == (int) Entry.Top && !rScript.topWallEntry.gameObject.activeSelf) {
+				isValid = true;
+			}
+			if(rand == (int) Entry.Bottom && !rScript.bottomWallEntry.gameObject.activeSelf) {
+				isValid = true;
+			}
+			count++;
+		}
+		if (isValid) {
+			Transform door1 = rScript.createDoor (rand);
+			RoomObjectScript otherRoomScript = map [nextRoomTuple (doorLocation, rand)].GetComponentInChildren<RoomObjectScript> ();
+			Transform door2 = otherRoomScript.createDoor (reverseEntry (rand));
+			WallScript door1Script = door1.GetComponent<WallScript> ();
+			WallScript door2Script = door2.GetComponent<WallScript> ();
+			door1Script.otherDoor = door2;
+			door2Script.otherDoor = door1;
+		}
+
+		isValid = false;
+		count = 0;
+		Tuple keyLocation = new Tuple (0, 0);
+		while (!isValid && count < 1000) {
+			rand = Random.Range (0, map.Keys.Count);
+			int randcount = 0;
+			foreach (Tuple t in map.Keys) {
+				if (randcount == rand) {
+					keyLocation = t;
+					break;
+				}
+				randcount++;
+			}
+			if (distanceBetweenRooms (new Tuple (0, 0), keyLocation) > 0) {
+				isValid = true;
+			}
+			count++;
+		}
+		if (isValid) {
+			Transform keyTransform = (Transform) Instantiate 
+				(key, new Vector3 (keyLocation.x * 7 + (Random.value - 0.5f) * 4, keyLocation.y * 7 + (Random.value - 0.5f) * 4, -1), Quaternion.identity);
+			keyTransform.parent = map [keyLocation];
+		}
+	}
+
+	public int reverseEntry(int entry) {
+		if (entry == (int) Entry.Left) {
+			return (int)Entry.Right;
+		}
+		if (entry == (int) Entry.Right) {
+			return (int)Entry.Left;
+		}
+		if (entry == (int) Entry.Top) {
+			return (int)Entry.Bottom;
+		}
+		if (entry == (int) Entry.Bottom) {
+			return (int)Entry.Top;
+		}
+		return -1;
 	}
 
 	public struct QueuePair {

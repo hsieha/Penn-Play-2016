@@ -15,6 +15,10 @@ public class RoomObjectScript : MonoBehaviour {
 	public Transform topWallEntry;
 	public Transform bottomWallEntry;
 
+	enum Entry{
+		Left, Right, Top, Bottom
+	};
+
 	// Use this for initialization
 	void Start () {
 		rendereŕ = GetComponent<Renderer> ();
@@ -58,6 +62,34 @@ public class RoomObjectScript : MonoBehaviour {
 	public int numOfEntries() {
 		return (leftWallEntry.gameObject.activeSelf ? 0 : 1) + (rightWallEntry.gameObject.activeSelf ? 0 : 1) +
 		(topWallEntry.gameObject.activeSelf ? 0 : 1) + (bottomWallEntry.gameObject.activeSelf ? 0 : 1);
+	}
+
+	public Transform createDoor(int entry) {
+		if (entry == (int)Entry.Left) {
+			leftWallEntry.gameObject.SetActive (true);
+			WallScript wScript = leftWallEntry.GetComponent<WallScript> ();
+			wScript.isDoor = true;
+			return leftWallEntry;
+		}
+		if (entry == (int)Entry.Right) {
+			rightWallEntry.gameObject.SetActive (true);
+			WallScript wScript = rightWallEntry.GetComponent<WallScript> ();
+			wScript.isDoor = true;
+			return rightWallEntry;
+		}
+		if (entry == (int)Entry.Top) {
+			topWallEntry.gameObject.SetActive (true);
+			WallScript wScript = topWallEntry.GetComponent<WallScript> ();
+			wScript.isDoor = true;
+			return topWallEntry;
+		}
+		if (entry == (int)Entry.Bottom) {
+			bottomWallEntry.gameObject.SetActive (true);
+			WallScript wScript = bottomWallEntry.GetComponent<WallScript> ();
+			wScript.isDoor = true;
+			return bottomWallEntry;
+		}
+		return null;
 	}
 
 	public void deactivate() {

@@ -10,6 +10,7 @@ public class PlayerBehaviourScript : MonoBehaviour {
 	public Dictionary<Tuple, Transform> map;
 	public bool camMoving;
 	public bool hasTreasure;
+	public int numKeys;
 	public Vector3 targetCameraPosition;
 
     // Use this for initialization
@@ -20,8 +21,8 @@ public class PlayerBehaviourScript : MonoBehaviour {
 		map = levelGenerator.map;
 		camMoving = false;
 		hasTreasure = false;
+		numKeys = 0;
 		updateRoomPos ();
-
     }
 	
 	// Update is called once per frame
@@ -111,9 +112,23 @@ public class PlayerBehaviourScript : MonoBehaviour {
 		if (collision.collider.gameObject.layer == LayerMask.NameToLayer ("Wall")) {
 			rb.velocity = new Vector3 (0, 0, 0);
 		}
+		if (collision.collider.gameObject.tag == "WallPiece") {
+			WallScript wScript = collision.collider.GetComponent<WallScript> ();
+			if (wScript.isDoor && numKeys > 0) {
+				numKeys--;
+				wScript.isDoor = false;
+				collision.gameObject.SetActive (false);
+				WallScript otherWScript = wScript.otherDoor.GetComponent<WallScript> ();
+				otherWScript.isDoor = false;
+				wScript.otherDoor.gameObject.SetActive (false);
+			}
+		}
 		if (collision.collider.tag == "Item") {
 			if (collision.collider.name == "Treasure(Clone)") {
 				hasTreasure = true;
+			}
+			if (collision.collider.name == "Key(Clone)") {
+				numKeys++;
 			}
 			Destroy (collision.gameObject);
 		}
