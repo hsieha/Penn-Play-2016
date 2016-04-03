@@ -10,6 +10,7 @@ public class WallScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rend = GetComponent<Renderer> ();
+		hide ();
 	}
 	
 	// Update is called once per frame

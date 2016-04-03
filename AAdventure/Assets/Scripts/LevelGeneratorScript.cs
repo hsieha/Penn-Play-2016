@@ -29,7 +29,6 @@ public class LevelGeneratorScript : MonoBehaviour {
 		RoomScript rScript = r.GetComponentInChildren<RoomScript> ();
 		rScript.setWallEntries (leftEntry, rightEntry, topEntry, bottomEntry);
 		map.Add (new Tuple (x, y), r);
-
 	}
 
 	void generateLevel() {
@@ -99,16 +98,31 @@ public class LevelGeneratorScript : MonoBehaviour {
 			entriesSet.Add (e);
 		}
 		HashSet<int> newEntries = new HashSet<int> ();
-		while (entriesSet.Count < 3 - layer) {
-			int rand = Random.Range (0, 3);
-			while (entriesSet.Contains (rand)) {
-				rand = Random.Range (0, 3);
+		int count = 0;
+		while (entriesSet.Count < 3 - layer && count < 1000) {
+			int rand = Random.Range (0, 4);
+			while (entriesSet.Contains (rand) || map.ContainsKey(nextRoomTuple(new Tuple(x,y),rand))) {
+				rand = Random.Range (0, 4);
 			}
 			entriesSet.Add (rand);
 			newEntries.Add (rand);
+			count++;
 		}
 		instantiateRoom (x, y, !entriesSet.Contains (0), !entriesSet.Contains (1), !entriesSet.Contains (2), !entriesSet.Contains (3));
 		return newEntries;
 	}
-		
+
+	
+	public Tuple nextRoomTuple(Tuple curTuple, int entry) {
+		if (entry == (int)Entry.Left) {
+			return new Tuple (curTuple.x - 1, curTuple.y);
+		} else if (entry == (int)Entry.Right) {
+			return new Tuple (curTuple.x + 1, curTuple.y);
+		} else if (entry == (int)Entry.Top) {
+			return new Tuple (curTuple.x, curTuple.y + 1);
+		} else if (entry == (int)Entry.Bottom) {
+			return new Tuple (curTuple.x, curTuple.y - 1);
+		}
+		return null;
+	}
 }
