@@ -24,6 +24,7 @@ public class RoomUIScript : MonoBehaviour {
         roomTimer.transform.SetParent(canvas.transform, false);
         gameOverCanvas = GameObject.Find("GameOverCanvas");
 		playerScript = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerBehaviourScript> ();
+        roomTimer.SetActive(roomInfoScript.isActive);
     }
 	
 	// Update is called once per frame
@@ -39,6 +40,7 @@ public class RoomUIScript : MonoBehaviour {
 
         if (roomInfoScript.isActive || (playerScript.hasTreasure && activeTimerText.color != Color.black))
         {
+            roomTimer.SetActive(true);
             activeTimerText.color = baseText;
 
             if (roomInfoScript.time < 0f)

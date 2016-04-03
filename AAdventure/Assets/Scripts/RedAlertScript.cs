@@ -17,7 +17,7 @@ public class RedAlertScript : MonoBehaviour {
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBehaviourScript>();
         if (playerScript != null && playerScript.hasTreasure)
         {
-            Debug.Log(" treasure");
+            //Debug.Log(" treasure");
             animator.SetTrigger("TreasureFound");
         }
     }
