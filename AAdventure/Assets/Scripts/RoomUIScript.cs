@@ -5,20 +5,32 @@ using System;
 
 public class RoomUIScript : MonoBehaviour {
     private RoomInfoScript roomInfoScript;
+<<<<<<< HEAD
+    private GameInfoScript gameInfoScript;
+=======
 	PlayerBehaviourScript playerScript;
+>>>>>>> origin/master
     public Canvas canvas;
 	public GameObject roomTimer;
-    public GameObject mainRoomTimer;
+    public GameObject gameOverCanvas;
     private Text timeText;
     private Text mainTimeText;
+
+    private Color baseText = new Color(0.49f, 0.46f, 0.36f, 0.5f);
+    private Color pulseRed = new Color(1f, 0.67f, 0.15f, 0.38f);
+    //private float pulseTime = 1f;
 
     // Use this for initialization
     void Start () {
         roomInfoScript = transform.parent.GetComponent<RoomInfoScript>();
         roomTimer = Instantiate(roomTimer) as GameObject;
         roomTimer.transform.SetParent(canvas.transform, false);
+<<<<<<< HEAD
+        gameOverCanvas = GameObject.Find("GameOverCanvas");
+=======
 		mainRoomTimer = GameObject.Find ("MainTimer");
 		playerScript = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerBehaviourScript> ();
+>>>>>>> origin/master
     }
 	
 	// Update is called once per frame
@@ -34,10 +46,13 @@ public class RoomUIScript : MonoBehaviour {
 
         if (roomInfoScript.isActive || playerScript.hasTreasure)
         {
-            activeTimerText.color = new Color(0.49f, 0.46f, 0.36f, 0.5f);
+            activeTimerText.color = baseText;
 
             if (roomInfoScript.time < 0f)
             {
+                activeTimerText.color = Color.red;
+                gameInfoScript = gameOverCanvas.GetComponent<GameInfoScript>();
+                gameInfoScript.isOver = true;
                 return;
             }
 
@@ -46,12 +61,17 @@ public class RoomUIScript : MonoBehaviour {
 
             if (roomInfoScript.time < 10f)
             {
-                activeTimerText.color = Color.red;
+                activeTimerText.color = Color.Lerp(Color.red, pulseRed, Mathf.PingPong(Time.time, 0.5f));
+
+                if ((int)Math.Ceiling(roomInfoScript.time) % 2 == 0)
+                {
+                    activeTimerText.fontSize = 34;
+                }
+                else
+                {
+                    activeTimerText.fontSize = 30;
+                }
             }
-//                else
-//                {
-//                    activeTimerText.color = Color.white;
-//                }
         }
 
         activeTimerText.text = getTimeText(roomInfoScript.time);
@@ -62,7 +82,7 @@ public class RoomUIScript : MonoBehaviour {
         //var minutes = (int)Math.Ceiling(time) / 60;
         var seconds = (int)Math.Ceiling(time) % 60;
 
-        String timerText = string.Format("{0:00}", seconds);
+        String timerText = string.Format("{0:0}", seconds);
 
         return timerText;
     }
