@@ -6,7 +6,6 @@ public class ReplayButtonScript : MonoBehaviour {
 
     public void replayGame()
     {
-        Debug.Log("Again!");
         Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.name);
     }
