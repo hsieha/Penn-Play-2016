@@ -8,7 +8,7 @@ public class RoomInfoScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         time = 60f;
-        isActive = true;
+        isActive = false;
 	}
 	
 	// Update is called once per frame
