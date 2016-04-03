@@ -153,7 +153,8 @@ public class LevelGeneratorScript : MonoBehaviour {
 			count++;
 		}
 		Transform treasureTransform = (Transform) 
-			Instantiate (treasure, new Vector3 (treasureLocation.x*7+(Random.value-0.5f)*4, treasureLocation.y*7+(Random.value-0.5f)*4, -1), Quaternion.identity);
+			Instantiate (treasure, new Vector3 (treasureLocation.x*7+(Random.value-0.5f)*4, 
+				treasureLocation.y*7+(Random.value-0.5f)*4, -1), Quaternion.AngleAxis(180,new Vector3(0,0,1)));
 		treasureTransform.parent = map [treasureLocation];
 		generateExit (treasureLocation, 4);
 	}
