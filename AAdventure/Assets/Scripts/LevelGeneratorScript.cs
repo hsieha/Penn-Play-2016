@@ -5,10 +5,14 @@ using System.Collections.Generic;
 public class LevelGeneratorScript : MonoBehaviour {
 	public Dictionary<Tuple, Transform> map;
 
+	public Tuple treasureLocation;
+	public Tuple exitLocation;
+
 	public Transform room;
 	public Transform player;
 	public Transform treasure;
 	public Transform exit;
+	public Transform obstacle;
 
 	enum Entry{
 		Left, Right, Top, Bottom
@@ -19,6 +23,8 @@ public class LevelGeneratorScript : MonoBehaviour {
 		map = new Dictionary<Tuple, Transform> ();
 		generateLevel ();
 		generateTreasure ();
+		generateExit (4);
+		generateObstacles (2);
 		Instantiate (player, new Vector3 (0, 0, -1), Quaternion.AngleAxis(90, new Vector3(1,0,0)));
 	}
 	
@@ -142,7 +148,7 @@ public class LevelGeneratorScript : MonoBehaviour {
 				ends.Add (t);
 			}
 		}
-		Tuple treasureLocation = new Tuple(0,0);
+		treasureLocation = new Tuple(0,0);
 		int rand = Random.Range (0, ends.Count);
 		int count = 0;
 		foreach (Tuple t in ends) {
@@ -156,10 +162,10 @@ public class LevelGeneratorScript : MonoBehaviour {
 			Instantiate (treasure, new Vector3 (treasureLocation.x*7+(Random.value-0.5f)*4, 
 				treasureLocation.y*7+(Random.value-0.5f)*4, -1), Quaternion.AngleAxis(180,new Vector3(0,0,1)));
 		treasureTransform.parent = map [treasureLocation];
-		generateExit (treasureLocation, 4);
+
 	}
 
-	public void generateExit(Tuple treasureLocation, int minDist) {
+	public void generateExit(int minDist) {
 		HashSet<Tuple> possible = new HashSet<Tuple> ();
 		foreach (Tuple t in map.Keys) {
 			if (distanceBetweenRooms (treasureLocation, t) >= minDist) {
@@ -168,7 +174,7 @@ public class LevelGeneratorScript : MonoBehaviour {
 		}
 		int rand = Random.Range (0, possible.Count);
 		int count = 0;
-		Tuple exitLocation = treasureLocation;
+		exitLocation = treasureLocation;
 		foreach (Tuple t in possible) {
 			if (count == rand) {
 				exitLocation = t;
@@ -179,6 +185,22 @@ public class LevelGeneratorScript : MonoBehaviour {
 		Transform exitTransform = (Transform) 
 			Instantiate (exit, new Vector3 (exitLocation.x*7, exitLocation.y*7, -1), Quaternion.identity);
 		exitTransform.parent = map [exitLocation];
+	}
+
+	public void generateObstacles(int difficulty) {
+		int count = 0;
+		while (count < difficulty) {
+			foreach (Tuple t in map.Keys) {
+				if (t.Equals (new Tuple (0, 0)))
+					continue;
+				if (Random.value < 0.25) {
+					Transform obstacleTransform = (Transform) Instantiate 
+						(obstacle, new Vector3 (t.x * 7 + (Random.value - 0.5f) * 3, t.y * 7 + (Random.value - 0.5f) * 3, -1), Quaternion.identity);
+					obstacleTransform.parent = map [t];
+				}
+			}
+			count++;
+		}
 	}
 
 	public struct QueuePair {

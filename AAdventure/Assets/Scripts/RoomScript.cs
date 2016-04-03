@@ -15,13 +15,13 @@ public class RoomScript : MonoBehaviour {
 	void Update () {
 		if (!roomInfoScript.isActive) {
 			foreach (Transform t in transform) {
-				if (t.tag == "Item" || t.tag == "Finish") {
+				if (t.tag == "Item" || t.tag == "Finish" || t.tag == "Death") {
 					t.gameObject.SetActive (false);
 				}
 			}
 		} else {
 			foreach (Transform t in transform) {
-				if (t.tag == "Item") {
+				if (t.tag == "Item" || t.tag == "Death") {
 					t.gameObject.SetActive (true);
 				}
 				if (t.tag == "Finish"){

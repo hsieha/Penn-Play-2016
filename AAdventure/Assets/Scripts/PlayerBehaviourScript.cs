@@ -121,6 +121,10 @@ public class PlayerBehaviourScript : MonoBehaviour {
 			Debug.Log ("YOU WIN");
 			Destroy (this);
 		}
+		if (collision.collider.tag == "Death") {
+			Debug.Log ("YOU LOSE");
+			Destroy (this);
+		}
     }
 
 }
