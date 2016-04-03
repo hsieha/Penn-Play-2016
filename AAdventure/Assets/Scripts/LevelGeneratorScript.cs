@@ -22,13 +22,13 @@ public class LevelGeneratorScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		map = new Dictionary<Tuple, Transform> ();
-		generateLevel ();
+        generateLevel ();
 		generateTreasure ();
 		generateExit (4);
 		generateObstacles (2);
 		generateKeyAndDoor ();
-		Instantiate (player, new Vector3 (0, 0, -1), Quaternion.AngleAxis(90, new Vector3(1,0,0)));
-	}
+        Instantiate(player, new Vector3(0, 0, -1), Quaternion.AngleAxis(90, new Vector3(1, 0, 0)));
+    }
 	
 	// Update is called once per frame
 	void Update () {
