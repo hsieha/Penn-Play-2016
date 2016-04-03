@@ -2,10 +2,18 @@
 using System.Collections;
 
 public class WallScript : MonoBehaviour {
+	public Material door;
 	public Material active;
 	public Material inactive;
 	public Material hidden;
 	public Renderer rend;
+
+	public bool isDoor;
+	public Transform otherDoor;
+
+	void Awake() {
+		isDoor = false;
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -19,11 +27,19 @@ public class WallScript : MonoBehaviour {
 	}
 
 	public void activate() {
-		rend.material = active;
+		if (!isDoor) {
+			rend.material = active;
+		} else {
+			rend.material = door;
+		}
 	}
 
 	public void deactivate() {
-		rend.material = inactive;
+		if (!isDoor) {
+			rend.material = inactive;
+		} else {
+			rend.material = door;
+		}
 	}
 
 	public void hide() {

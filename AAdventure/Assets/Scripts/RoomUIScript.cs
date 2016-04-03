@@ -5,7 +5,11 @@ using System;
 
 public class RoomUIScript : MonoBehaviour {
     private RoomInfoScript roomInfoScript;
+<<<<<<< HEAD
     private GameInfoScript gameInfoScript;
+=======
+	PlayerBehaviourScript playerScript;
+>>>>>>> origin/master
     public Canvas canvas;
 	public GameObject roomTimer;
     public GameObject gameOverCanvas;
@@ -21,7 +25,12 @@ public class RoomUIScript : MonoBehaviour {
         roomInfoScript = transform.parent.GetComponent<RoomInfoScript>();
         roomTimer = Instantiate(roomTimer) as GameObject;
         roomTimer.transform.SetParent(canvas.transform, false);
+<<<<<<< HEAD
         gameOverCanvas = GameObject.Find("GameOverCanvas");
+=======
+		mainRoomTimer = GameObject.Find ("MainTimer");
+		playerScript = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerBehaviourScript> ();
+>>>>>>> origin/master
     }
 	
 	// Update is called once per frame
@@ -35,7 +44,7 @@ public class RoomUIScript : MonoBehaviour {
 
         Text activeTimerText = roomTimer.GetComponentInChildren<Text>();
 
-        if (roomInfoScript.isActive)
+        if (roomInfoScript.isActive || playerScript.hasTreasure)
         {
             activeTimerText.color = baseText;
 
