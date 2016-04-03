@@ -8,6 +8,7 @@ public class LevelGeneratorScript : MonoBehaviour {
 	public Transform room;
 	public Transform player;
 	public Transform treasure;
+	public Transform exit;
 
 	enum Entry{
 		Left, Right, Top, Bottom
@@ -101,7 +102,7 @@ public class LevelGeneratorScript : MonoBehaviour {
 		}
 		HashSet<int> newEntries = new HashSet<int> ();
 
-		while (entriesSet.Count < 3 - layer) {
+		while (entriesSet.Count < 4 - layer) {
 			int rand = Random.Range (0, 4);
 			int count = 0;
 			while ((entriesSet.Contains (rand) || map.ContainsKey(nextRoomTuple(new Tuple(x,y),rand))) && count < 1000) {
@@ -151,9 +152,82 @@ public class LevelGeneratorScript : MonoBehaviour {
 			}
 			count++;
 		}
-		Debug.Log (treasureLocation.x + " " + treasureLocation.y);
 		Transform treasureTransform = (Transform) 
 			Instantiate (treasure, new Vector3 (treasureLocation.x*7+(Random.value-0.5f)*4, treasureLocation.y*7+(Random.value-0.5f)*4, -1), Quaternion.identity);
 		treasureTransform.parent = map [treasureLocation];
+		generateExit (treasureLocation, 4);
+	}
+
+	public void generateExit(Tuple treasureLocation, int minDist) {
+		HashSet<Tuple> possible = new HashSet<Tuple> ();
+		foreach (Tuple t in map.Keys) {
+			if (distanceBetweenRooms (treasureLocation, t) >= minDist) {
+				possible.Add (t);
+			}
+		}
+		int rand = Random.Range (0, possible.Count);
+		int count = 0;
+		Tuple exitLocation = treasureLocation;
+		foreach (Tuple t in possible) {
+			if (count == rand) {
+				exitLocation = t;
+				break;
+			}
+			count++;
+		}
+		Transform exitTransform = (Transform) 
+			Instantiate (exit, new Vector3 (exitLocation.x*7, exitLocation.y*7, -1), Quaternion.identity);
+		exitTransform.parent = map [exitLocation];
+	}
+
+	public struct QueuePair {
+		public Tuple tuple;
+		public int dist;
+		public QueuePair(Tuple t, int d) {
+			tuple = t;
+			dist = d;
+		}
+	}
+
+	public int distanceBetweenRooms(Tuple start, Tuple dest) {
+		Queue<QueuePair> tuples = new Queue<QueuePair> ();
+		HashSet<Tuple> seen = new HashSet<Tuple> ();
+		seen.Add (start);
+		tuples.Enqueue (new QueuePair(start,0));
+		while (tuples.Count > 0) {
+			QueuePair p = tuples.Dequeue ();
+			if (p.tuple.Equals(dest)) {
+				return p.dist;
+			}
+			HashSet<Tuple> neighbors = getNeighbors (p.tuple);
+			foreach (Tuple neighbor in neighbors) {
+				
+				if (!seen.Contains (neighbor)) {
+					seen.Add (neighbor);
+					tuples.Enqueue (new QueuePair (neighbor, p.dist + 1));
+				}
+			}
+		}
+		return -1;
+	}
+
+	public HashSet<Tuple> getNeighbors(Tuple t) {
+		HashSet<Tuple> neighbors = new HashSet<Tuple> ();
+		if (map.ContainsKey (t)) {
+			RoomObjectScript roomObjectScript = map [t].GetComponentInChildren<RoomObjectScript> ();
+			if (!roomObjectScript.leftWallEntry.gameObject.activeSelf) {
+				neighbors.Add (nextRoomTuple (t, (int)Entry.Left));
+			}
+			if (!roomObjectScript.rightWallEntry.gameObject.activeSelf) {
+				neighbors.Add (nextRoomTuple (t, (int)Entry.Right));
+			}
+			if (!roomObjectScript.topWallEntry.gameObject.activeSelf) {
+				neighbors.Add (nextRoomTuple (t, (int)Entry.Top));
+			}
+			if (!roomObjectScript.bottomWallEntry.gameObject.activeSelf) {
+				neighbors.Add (nextRoomTuple (t, (int)Entry.Bottom));
+			}
+		}
+		return neighbors;
 	}
 }

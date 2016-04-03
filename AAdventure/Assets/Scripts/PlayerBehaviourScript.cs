@@ -9,6 +9,7 @@ public class PlayerBehaviourScript : MonoBehaviour {
 	public GameObject cam;
 	public Dictionary<Tuple, Transform> map;
 	public bool camMoving;
+	public bool hasTreasure;
 	public Vector3 targetCameraPosition;
 
     // Use this for initialization
@@ -18,6 +19,7 @@ public class PlayerBehaviourScript : MonoBehaviour {
 		LevelGeneratorScript levelGenerator = (LevelGeneratorScript) GameObject.Find ("LevelGenerator").GetComponent("LevelGeneratorScript");
 		map = levelGenerator.map;
 		camMoving = false;
+		hasTreasure = false;
 		updateRoomPos ();
 
     }
@@ -110,7 +112,14 @@ public class PlayerBehaviourScript : MonoBehaviour {
 			rb.velocity = new Vector3 (0, 0, 0);
 		}
 		if (collision.collider.tag == "Item") {
+			if (collision.collider.name == "Treasure(Clone)") {
+				hasTreasure = true;
+			}
 			Destroy (collision.gameObject);
+		}
+		if (collision.collider.tag == "Finish") {
+			Debug.Log ("YOU WIN");
+			Destroy (this);
 		}
     }
 
