@@ -13,7 +13,7 @@ public class RoomUIScript : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        roomInfoScript = GetComponent<RoomInfoScript>();
+        roomInfoScript = transform.parent.GetComponent<RoomInfoScript>();
         roomTimer = Instantiate(roomTimer) as GameObject;
         roomTimer.transform.SetParent(canvas.transform, false);
 		mainRoomTimer = GameObject.Find ("MainTimer");

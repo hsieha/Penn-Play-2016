@@ -80,7 +80,7 @@ public class PlayerBehaviourScript : MonoBehaviour {
 					break;
 				}
 			}
-			RoomScript roomScript = (RoomScript)r.GetComponent ("RoomScript");
+			RoomObjectScript roomScript = r.GetComponent<RoomObjectScript>();
 			roomScript.activate ();
 		}
 		for (int i = curLocation.x - 1; i < curLocation.x + 2; i++) {
@@ -97,7 +97,7 @@ public class PlayerBehaviourScript : MonoBehaviour {
 							break;
 						}
 					}
-					RoomScript roomScript = (RoomScript) r.GetComponent ("RoomScript");
+					RoomObjectScript roomScript = r.GetComponent<RoomObjectScript>();
 					roomScript.deactivate ();
 				}
 			}
