@@ -39,9 +39,17 @@ public class ObstacleScript : MonoBehaviour {
 	void Update () {
 		if (rb.velocity == new Vector3 (0, 0, 0)) {
 			if (direction == Direction.Horizontal) {
-				rb.velocity = new Vector3 (-3, 0, 0);
+				if (Random.value < 0.5) {
+					rb.velocity = new Vector3 (3, 0, 0);
+				} else {
+					rb.velocity = new Vector3 (-3, 0, 0);
+				}
 			} else {
-				rb.velocity = new Vector3 (0, -3, 0);
+				if (Random.value < 0.5) {
+					rb.velocity = new Vector3 (0, 3, 0);
+				} else {
+					rb.velocity = new Vector3 (0, -3, 0);
+				}
 			}
 			curVel = rb.velocity;
 		}
