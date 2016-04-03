@@ -8,6 +8,8 @@ public class PlayerBehaviourScript : MonoBehaviour {
 	public Vector3 curRoomPos;
 	public GameObject cam;
 	public Dictionary<Tuple, Transform> map;
+	public bool camMoving;
+	public Vector3 targetCameraPosition;
 
     // Use this for initialization
     void Start () {
@@ -15,41 +17,56 @@ public class PlayerBehaviourScript : MonoBehaviour {
 		cam = GameObject.Find ("Main Camera");
 		LevelGeneratorScript levelGenerator = (LevelGeneratorScript) GameObject.Find ("LevelGenerator").GetComponent("LevelGeneratorScript");
 		map = levelGenerator.map;
+		camMoving = false;
 		updateRoomPos ();
 
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            rb.MovePosition(this.transform.position - new Vector3(0, 1 * offset, 0));
-        }
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            rb.MovePosition(this.transform.position - new Vector3(0, -1 * offset, 0));
-        }
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            rb.MovePosition(this.transform.position - new Vector3(offset, 0, 0));
-        }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            rb.MovePosition(this.transform.position - new Vector3(-1 * offset, 0, 0));
-		} 
+		if (!camMoving) {
+			if (Input.GetKey (KeyCode.DownArrow)) {
+				rb.MovePosition (this.transform.position - new Vector3 (0, 1 * offset, 0));
+			}
+			if (Input.GetKey (KeyCode.UpArrow)) {
+				rb.MovePosition (this.transform.position - new Vector3 (0, -1 * offset, 0));
+			}
+			if (Input.GetKey (KeyCode.LeftArrow)) {
+				rb.MovePosition (this.transform.position - new Vector3 (offset, 0, 0));
+			}
+			if (Input.GetKey (KeyCode.RightArrow)) {
+				rb.MovePosition (this.transform.position - new Vector3 (-1 * offset, 0, 0));
+			} 
+		}
 		if (rb.position.x > curRoomPos.x + 3.5) {
-			cam.transform.position += new Vector3 (7, 0, 0);
-			updateRoomPos ();
+			if (!camMoving) {
+				camMoving = true;
+				targetCameraPosition = cam.transform.position + new Vector3 (7, 0, 0);
+			}
 		} else if (rb.position.x < curRoomPos.x - 3.5) {
-			cam.transform.position += new Vector3 (-7, 0, 0);
-			updateRoomPos ();
+			if (!camMoving) {
+				camMoving = true;
+				targetCameraPosition = cam.transform.position + new Vector3 (-7, 0, 0);
+			}
 		} else if (rb.position.y > curRoomPos.y + 3.5) {
-			cam.transform.position += new Vector3 (0, 7, 0);
-			updateRoomPos ();
+			if (!camMoving) {
+				camMoving = true;
+				targetCameraPosition = cam.transform.position + new Vector3 (0, 7, 0);
+			}
 		} else if (rb.position.y < curRoomPos.y - 3.5) {
-			cam.transform.position += new Vector3 (0, -7, 0);
+			if (!camMoving) {
+				camMoving = true;
+				targetCameraPosition = cam.transform.position + new Vector3 (0, -7, 0);
+			}
+		}
+		if (camMoving) {
+			cam.transform.position = Vector3.MoveTowards(cam.transform.position, targetCameraPosition, 20 * Time.deltaTime);
+		}
+		if (camMoving && cam.transform.position == targetCameraPosition) {
+			camMoving = false;
 			updateRoomPos ();
 		}
+
     }
 
 	void updateRoomPos() {
