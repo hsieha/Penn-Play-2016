@@ -37,7 +37,7 @@ public class RoomUIScript : MonoBehaviour {
 
         Text activeTimerText = roomTimer.GetComponentInChildren<Text>();
 
-        if (roomInfoScript.isActive || playerScript.hasTreasure)
+        if (roomInfoScript.isActive || (playerScript.hasTreasure && activeTimerText.color != Color.black))
         {
             activeTimerText.color = baseText;
 
