@@ -15,6 +15,8 @@ public class LevelGeneratorScript : MonoBehaviour {
 	public Transform obstacle;
 	public Transform key;
 
+	public int levelNumber;
+
 	enum Entry{
 		Left, Right, Top, Bottom
 		};
@@ -22,7 +24,9 @@ public class LevelGeneratorScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		map = new Dictionary<Tuple, Transform> ();
-		generateLevel (0);
+		levelNumber = PlayerPrefs.GetInt ("LevelNumber", 0);
+		Debug.Log ("level: " + levelNumber);
+		generateLevel (levelNumber);
         Instantiate(player, new Vector3(0, 0, -1), Quaternion.AngleAxis(90, new Vector3(1, 0, 0)));
     }
 	

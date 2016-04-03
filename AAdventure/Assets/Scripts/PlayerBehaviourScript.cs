@@ -114,6 +114,8 @@ public class PlayerBehaviourScript : MonoBehaviour {
         {
             gameInfoScript = gameOverCanvas.GetComponent<GameInfoScript>();
             gameInfoScript.isOver = true;
+			PlayerPrefs.SetInt ("LevelNumber", 0);
+			PlayerPrefs.Save ();
         }
 	}
 
@@ -147,12 +149,16 @@ public class PlayerBehaviourScript : MonoBehaviour {
 			gameInfoScript = winCanvas.GetComponent<GameInfoScript> ();
 			gameInfoScript.isOver = true;
 			gameInfoScript.isWon = true;
+			PlayerPrefs.SetInt ("LevelNumber", PlayerPrefs.GetInt ("LevelNumber", 0) + 1);
+			PlayerPrefs.Save ();
 			Destroy (this);
 		}
 		if (collision.collider.tag == "Death") {
 			Debug.Log ("YOU LOSE");
             gameInfoScript = gameOverCanvas.GetComponent<GameInfoScript>();
             gameInfoScript.isOver = true;
+			PlayerPrefs.SetInt ("LevelNumber", 0);
+			PlayerPrefs.Save ();
             Destroy (this);
 		}
     }
