@@ -20,6 +20,11 @@ public class RoomUIScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        Vector3 worldPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+        roomTimer.transform.position = new Vector3(screenPos.x, screenPos.y, screenPos.z);
+
         roomTimer.SetActive(!roomInfoScript.isActive);
 
         Text activeTimerText = roomTimer.GetComponentInChildren<Text>();
