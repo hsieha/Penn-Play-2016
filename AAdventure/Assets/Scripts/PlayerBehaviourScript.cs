@@ -1,17 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerBehaviourScript : MonoBehaviour {
     public float offset = 0.2f;
     public Rigidbody rb;
 	public Vector3 curRoomPos;
 	public GameObject cam;
+	public Dictionary<Tuple, Transform> map;
 
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody>();
 		cam = GameObject.Find ("Main Camera");
+		LevelGeneratorScript levelGenerator = (LevelGeneratorScript) GameObject.Find ("LevelGenerator").GetComponent("LevelGeneratorScript");
+		map = levelGenerator.map;
 		updateRoomPos ();
+
     }
 	
 	// Update is called once per frame
@@ -49,6 +54,25 @@ public class PlayerBehaviourScript : MonoBehaviour {
 
 	void updateRoomPos() {
 		curRoomPos = cam.transform.position + new Vector3 (0, -2, 20);
+		Tuple curLocation = new Tuple((int) curRoomPos.x / 7, (int) curRoomPos.y / 7);
+		if (map.ContainsKey (curLocation)) {
+			Transform r = map [curLocation];
+			RoomScript roomScript = (RoomScript)r.GetComponent ("RoomScript");
+			roomScript.activate ();
+		}
+		for (int i = curLocation.x - 1; i < curLocation.x + 2; i++) {
+			for (int j = curLocation.y - 1; j < curLocation.y + 2; j++) {
+				if (i == curLocation.x && j == curLocation.y) {
+					continue;
+				}
+				Tuple t = new Tuple (i, j);
+				if (map.ContainsKey (t)) {
+					Transform r = map [t];
+					RoomScript roomScript = (RoomScript) r.GetComponent ("RoomScript");
+					roomScript.deactivate ();
+				}
+			}
+		}
 	}
 
     void OnCollisionEnter(Collision collision)
