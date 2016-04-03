@@ -17,8 +17,8 @@ public class WinScript : MonoBehaviour {
 	void Update () {
 		if (gameInfoScript.isOver && gameInfoScript.isWon)
 		{
-			Debug.Log ("won");
-			animator.SetTrigger("GameOver");
+			//Debug.Log ("won");
+			animator.SetTrigger("GameWon");
 		}
 	}
 }
