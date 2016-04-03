@@ -6,7 +6,7 @@ using System;
 public class RoomUIScript : MonoBehaviour {
     private RoomInfoScript roomInfoScript;
     public Canvas canvas;
-    public GameObject roomTimer;
+	public GameObject roomTimer;
     public GameObject mainRoomTimer;
     private Text timeText;
     private Text mainTimeText;
@@ -16,6 +16,7 @@ public class RoomUIScript : MonoBehaviour {
         roomInfoScript = GetComponent<RoomInfoScript>();
         roomTimer = Instantiate(roomTimer) as GameObject;
         roomTimer.transform.SetParent(canvas.transform, false);
+		mainRoomTimer = GameObject.Find ("MainTimer");
     }
 	
 	// Update is called once per frame
