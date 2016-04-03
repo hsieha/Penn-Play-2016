@@ -44,9 +44,13 @@ public class RoomUIScript : MonoBehaviour {
             if (roomInfoScript.time < 0f)
             {
                 activeTimerText.color = Color.red;
-                gameInfoScript = gameOverCanvas.GetComponent<GameInfoScript>();
-                gameInfoScript.isOver = true;
-                return;
+                if (roomInfoScript.isActive)
+                {
+                    gameInfoScript = gameOverCanvas.GetComponent<GameInfoScript>();
+                    gameInfoScript.isOver = true;
+                    return;
+                }
+                transform.parent.gameObject.SetActive(false);
             }
 
             //activeTimerText = mainRoomTimer.GetComponentInChildren<Text>();
