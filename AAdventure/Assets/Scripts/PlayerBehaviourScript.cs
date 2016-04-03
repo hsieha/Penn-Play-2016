@@ -10,7 +10,8 @@ public class PlayerBehaviourScript : MonoBehaviour {
     public Rigidbody rb;
 	public Vector3 curRoomPos;
 	public GameObject cam;
-	public Dictionary<Tuple, Transform> map;
+    public GameObject startPanel;
+    public Dictionary<Tuple, Transform> map;
 	public bool camMoving;
 	public bool hasTreasure;
 	public int numKeys;
@@ -28,11 +29,16 @@ public class PlayerBehaviourScript : MonoBehaviour {
 		updateRoomPos ();
         gameOverCanvas = GameObject.Find("GameOverCanvas");
 		winCanvas = GameObject.Find ("WinCanvas");
+        startPanel = GameObject.Find("StartPanel");
     }
 	
 	// Update is called once per frame
 	void Update () {
 		if (!camMoving) {
+            if (Input.anyKey && startPanel != null)
+            {
+                startPanel.SetActive(false);
+            }
 			if (Input.GetKey (KeyCode.DownArrow)) {
 				rb.MovePosition (this.transform.position - new Vector3 (0, 1 * offset, 0));
 			}
