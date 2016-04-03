@@ -22,11 +22,7 @@ public class LevelGeneratorScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		map = new Dictionary<Tuple, Transform> ();
-        generateLevel ();
-		generateTreasure ();
-		generateExit (4);
-		generateObstacles (2);
-		generateKeyAndDoor ();
+		generateLevel (2);
         Instantiate(player, new Vector3(0, 0, -1), Quaternion.AngleAxis(90, new Vector3(1, 0, 0)));
     }
 	
@@ -42,7 +38,15 @@ public class LevelGeneratorScript : MonoBehaviour {
 		map.Add (new Tuple (x, y), r);
 	}
 
-	void generateLevel() {
+	void generateLevel(int difficulty) {
+		generateLayout (difficulty/2);
+		generateTreasure ();
+		generateExit (Mathf.Min(5,difficulty/2 + 1));
+		generateObstacles (Mathf.Max(0,difficulty-2));
+		generateKeysAndDoors (Random.Range(0,difficulty));
+	}
+
+	void generateLayout(int difficulty) {
 		Dictionary<Tuple, HashSet<int>> entryMap = new Dictionary<Tuple,HashSet<int>> ();
 		Tuple curTuple = new Tuple (0, 0);
 		entryMap.Add (curTuple, new HashSet<int> ());
@@ -51,7 +55,8 @@ public class LevelGeneratorScript : MonoBehaviour {
 				curTuple = t;
 				break;
 			}
-			HashSet<int> newEntries = randomizeRoom (curTuple.x, curTuple.y, entryMap[curTuple], (int) ((Mathf.Abs(curTuple.x)+Mathf.Abs(curTuple.y))/1));
+			HashSet<int> newEntries = randomizeRoom (curTuple.x, curTuple.y, entryMap[curTuple], 
+				(int) ((Mathf.Abs(curTuple.x)+Mathf.Abs(curTuple.y))/((difficulty+1)*0.25)));
 			foreach (int entry in newEntries) {
 				if (entry == (int)Entry.Left) {
 					Tuple left = new Tuple (curTuple.x - 1, curTuple.y);
@@ -201,6 +206,14 @@ public class LevelGeneratorScript : MonoBehaviour {
 					obstacleTransform.parent = map [t];
 				}
 			}
+			count++;
+		}
+	}
+
+	public void generateKeysAndDoors(int num) {
+		int count = 0;
+		while (count < num) {
+			generateKeyAndDoor ();
 			count++;
 		}
 	}
