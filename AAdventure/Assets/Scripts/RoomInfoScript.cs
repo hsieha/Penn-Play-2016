@@ -7,7 +7,7 @@ public class RoomInfoScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        time = 60f;
+        time = 30f;
         isActive = false;
 	}
 	

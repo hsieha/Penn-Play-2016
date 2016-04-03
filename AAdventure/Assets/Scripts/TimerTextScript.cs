@@ -9,12 +9,12 @@ public class TimerTextScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        time = 60f;
+        time = 30f;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        var minutes = (int)Math.Ceiling(time) / 60;
+        //var minutes = (int)Math.Ceiling(time) / 60;
         var seconds = (int)Math.Ceiling(time) % 60;
 
         if(time < 10f)
@@ -22,7 +22,7 @@ public class TimerTextScript : MonoBehaviour {
             timerText.color = Color.red;
         }
 
-        timerText.text = string.Format("{0:0} : {1:00}", minutes, seconds);
+        timerText.text = string.Format("{0:0}", seconds);
 
         time -= Time.deltaTime;
 
