@@ -74,6 +74,12 @@ public class PlayerBehaviourScript : MonoBehaviour {
 		Tuple curLocation = new Tuple((int) curRoomPos.x / 7, (int) curRoomPos.y / 7);
 		if (map.ContainsKey (curLocation)) {
 			Transform r = map [curLocation];
+			foreach (Transform rChild in r) {
+				if (rChild.name == "RoomObject") {
+					r = rChild;
+					break;
+				}
+			}
 			RoomScript roomScript = (RoomScript)r.GetComponent ("RoomScript");
 			roomScript.activate ();
 		}
@@ -85,6 +91,12 @@ public class PlayerBehaviourScript : MonoBehaviour {
 				Tuple t = new Tuple (i, j);
 				if (map.ContainsKey (t)) {
 					Transform r = map [t];
+					foreach (Transform rChild in r) {
+						if (rChild.name == "RoomObject") {
+							r = rChild;
+							break;
+						}
+					}
 					RoomScript roomScript = (RoomScript) r.GetComponent ("RoomScript");
 					roomScript.deactivate ();
 				}
