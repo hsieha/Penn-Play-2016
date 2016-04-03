@@ -50,6 +50,8 @@ public class RoomUIScript : MonoBehaviour {
                 {
                     gameInfoScript = gameOverCanvas.GetComponent<GameInfoScript>();
                     gameInfoScript.isOver = true;
+					PlayerPrefs.SetInt ("LevelNumber", 0);
+					PlayerPrefs.Save ();
                     return;
                 }
                 transform.parent.gameObject.SetActive(false);
