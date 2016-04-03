@@ -34,10 +34,17 @@ public class ObstacleScript : MonoBehaviour {
 		}
 		curVel = rb.velocity;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-	
+		if (rb.velocity == new Vector3 (0, 0, 0)) {
+			if (direction == Direction.Horizontal) {
+				rb.velocity = new Vector3 (-3, 0, 0);
+			} else {
+				rb.velocity = new Vector3 (0, -3, 0);
+			}
+			curVel = rb.velocity;
+		}
 	}
 
 	void OnCollisionEnter(Collision collision) {
