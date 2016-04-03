@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class PlayerBehaviourScript : MonoBehaviour {
     private GameInfoScript gameInfoScript;
     public GameObject gameOverCanvas;
+	public GameObject winCanvas;
     public float offset = 0.2f;
     public Rigidbody rb;
 	public Vector3 curRoomPos;
@@ -26,6 +27,7 @@ public class PlayerBehaviourScript : MonoBehaviour {
 		numKeys = 0;
 		updateRoomPos ();
         gameOverCanvas = GameObject.Find("GameOverCanvas");
+		winCanvas = GameObject.Find ("WinCanvas");
     }
 	
 	// Update is called once per frame
@@ -142,6 +144,9 @@ public class PlayerBehaviourScript : MonoBehaviour {
 		}
 		if (collision.collider.tag == "Finish") {
 			Debug.Log ("YOU WIN");
+			gameInfoScript = winCanvas.GetComponent<GameInfoScript> ();
+			gameInfoScript.isOver = true;
+			gameInfoScript.isWon = true;
 			Destroy (this);
 		}
 		if (collision.collider.tag == "Death") {

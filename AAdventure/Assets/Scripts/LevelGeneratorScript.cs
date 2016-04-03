@@ -22,7 +22,7 @@ public class LevelGeneratorScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		map = new Dictionary<Tuple, Transform> ();
-		generateLevel (2);
+		generateLevel (0);
         Instantiate(player, new Vector3(0, 0, -1), Quaternion.AngleAxis(90, new Vector3(1, 0, 0)));
     }
 	
@@ -55,8 +55,9 @@ public class LevelGeneratorScript : MonoBehaviour {
 				curTuple = t;
 				break;
 			}
+			int layers = (int)((Mathf.Abs (curTuple.x) + Mathf.Abs (curTuple.y)) / ((difficulty + 1) * 0.25));
 			HashSet<int> newEntries = randomizeRoom (curTuple.x, curTuple.y, entryMap[curTuple], 
-				(int) ((Mathf.Abs(curTuple.x)+Mathf.Abs(curTuple.y))/((difficulty+1)*0.25)));
+				Random.Range(Mathf.Max(0,layers-1),layers));
 			foreach (int entry in newEntries) {
 				if (entry == (int)Entry.Left) {
 					Tuple left = new Tuple (curTuple.x - 1, curTuple.y);
@@ -114,7 +115,6 @@ public class LevelGeneratorScript : MonoBehaviour {
 			entriesSet.Add (e);
 		}
 		HashSet<int> newEntries = new HashSet<int> ();
-
 		while (entriesSet.Count < 4 - layer) {
 			int rand = Random.Range (0, 4);
 			int count = 0;
@@ -201,8 +201,16 @@ public class LevelGeneratorScript : MonoBehaviour {
 				if (t.Equals (new Tuple (0, 0)))
 					continue;
 				if (Random.value < 0.25) {
+					float xDiff = (Random.value - 0.5f) * 4;
+					float yDiff = (Random.value - 0.5f) * 4;
+					if (Mathf.Abs (xDiff) < 0.1) {
+						xDiff = 0.1f*Mathf.Sign(xDiff);
+					}
+					if (Mathf.Abs (yDiff) < 0.1) {
+						yDiff = 0.1f * Mathf.Sign (yDiff);
+					}
 					Transform obstacleTransform = (Transform) Instantiate 
-						(obstacle, new Vector3 (t.x * 7 + (Random.value - 0.5f) * 4, t.y * 7 + (Random.value - 0.5f) * 4, -1), Quaternion.identity);
+						(obstacle, new Vector3 (t.x * 7 + xDiff, t.y * 7 + yDiff, -1), Quaternion.identity);
 					obstacleTransform.parent = map [t];
 				}
 			}

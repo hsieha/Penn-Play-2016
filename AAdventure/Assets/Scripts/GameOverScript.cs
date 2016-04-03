@@ -15,7 +15,7 @@ public class GameOverScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (gameInfoScript.isOver)
+        if (gameInfoScript.isOver && !gameInfoScript.isWon)
         {
             animator.SetTrigger("GameOver");
         }
