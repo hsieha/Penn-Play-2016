@@ -9,6 +9,7 @@ public class RoomScript : MonoBehaviour {
 	public Material hidden;
 	public Renderer rendereŕ;
 	public HashSet<Transform> walls;
+	public RoomInfoScript roomInfoScript;
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +23,7 @@ public class RoomScript : MonoBehaviour {
 			}
 		}
 		hasSeen = false;
+		roomInfoScript = transform.GetComponent<RoomInfoScript> ();
 	}
 	
 	// Update is called once per frame
@@ -43,6 +45,7 @@ public class RoomScript : MonoBehaviour {
 				wallScript.hide ();
 			}
 		}
+		roomInfoScript.isActive = false;
 	}
 
 	public void activate() {
@@ -52,5 +55,6 @@ public class RoomScript : MonoBehaviour {
 			WallScript wallScript = (WallScript) wallpiece.GetComponent ("WallScript");
 			wallScript.activate ();
 		}
+		roomInfoScript.isActive = true;
 	}
 }
