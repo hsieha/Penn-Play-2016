@@ -40,6 +40,7 @@ public class RoomScript : MonoBehaviour {
 		}
 		hasSeen = false;
 		roomInfoScript = transform.GetComponent<RoomInfoScript> ();
+		deactivate ();
 	}
 	
 	// Update is called once per frame
