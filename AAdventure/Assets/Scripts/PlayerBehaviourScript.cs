@@ -97,6 +97,9 @@ public class PlayerBehaviourScript : MonoBehaviour {
 		if (collision.collider.gameObject.layer == LayerMask.NameToLayer ("Wall")) {
 			rb.velocity = new Vector3 (0, 0, 0);
 		}
+		if (collision.collider.tag == "Item") {
+			Destroy (collision.gameObject);
+		}
     }
 
 }
