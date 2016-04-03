@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PlayerBehaviourScript : MonoBehaviour {
+    private GameInfoScript gameInfoScript;
+    public GameObject gameOverCanvas;
     public float offset = 0.2f;
     public Rigidbody rb;
 	public Vector3 curRoomPos;
@@ -23,6 +25,7 @@ public class PlayerBehaviourScript : MonoBehaviour {
 		hasTreasure = false;
 		numKeys = 0;
 		updateRoomPos ();
+        gameOverCanvas = GameObject.Find("GameOverCanvas");
     }
 	
 	// Update is called once per frame
@@ -105,6 +108,11 @@ public class PlayerBehaviourScript : MonoBehaviour {
 				}
 			}
 		}
+        if(!map[curLocation].gameObject.activeSelf)
+        {
+            gameInfoScript = gameOverCanvas.GetComponent<GameInfoScript>();
+            gameInfoScript.isOver = true;
+        }
 	}
 
     void OnCollisionEnter(Collision collision)
@@ -138,7 +146,9 @@ public class PlayerBehaviourScript : MonoBehaviour {
 		}
 		if (collision.collider.tag == "Death") {
 			Debug.Log ("YOU LOSE");
-			Destroy (this);
+            gameInfoScript = gameOverCanvas.GetComponent<GameInfoScript>();
+            gameInfoScript.isOver = true;
+            Destroy (this);
 		}
     }
 
